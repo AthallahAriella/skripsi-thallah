@@ -203,7 +203,7 @@ server.listen(process.env.PORT,  () => {
 });
 
 
-app.post(process.env.HOSTNAME, (req, res) => {
+app.post("/arduinoApi", (req, res) => {
     const data = req.body.data;
     const options = {
         hostname: '172.20.10.2',
@@ -218,7 +218,6 @@ app.post(process.env.HOSTNAME, (req, res) => {
         }
     };
 
-  
 
 
     const espReq = http.request(options, (espRes) => {
