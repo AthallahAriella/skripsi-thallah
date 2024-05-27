@@ -198,15 +198,13 @@ io.on("connection", (socket) => {
     });
 });
 
-server.listen(process.env.PORT, () => {
+server.listen(process.env.PORT,  () => {
     console.log("server on!");
 });
 
 
 app.post("/arduinoApi", (req, res) => {
     const data = req.body.data;
-   
-
     const options = {
         hostname: '172.20.10.2',
         // hostname: '213.210.21.65',    
