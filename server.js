@@ -203,7 +203,7 @@ server.listen(process.env.PORT,  () => {
 });
 
 
-app.post("/arduinoApi", (req, res) => {
+app.post(process.env.HOSTNAME, (req, res) => {
     const data = req.body.data;
     const options = {
         hostname: '172.20.10.2',
