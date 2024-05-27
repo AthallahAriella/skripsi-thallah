@@ -172,13 +172,15 @@ const { Server } = require("socket.io");
 const http = require("http");
 const express = require("express");
 const path = require("path");
-
+require('dotenv').config()
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
 const portku = 3000;
-const ipku = '213.210.21.65';
+const hostnamebaru = '213.210.21.65';
+
+
 
 app.use(express.json());
 
@@ -196,13 +198,14 @@ io.on("connection", (socket) => {
     });
 });
 
-server.listen(3000, () => {
+server.listen(process.env.PORT, () => {
     console.log("server on!");
 });
 
 
 app.post("/arduinoApi", (req, res) => {
     const data = req.body.data;
+   
 
     const options = {
         hostname: '172.20.10.2',
@@ -217,6 +220,9 @@ app.post("/arduinoApi", (req, res) => {
         }
     };
 
+  
+
+
     const espReq = http.request(options, (espRes) => {
         let responseData = '';
 
@@ -229,6 +235,8 @@ app.post("/arduinoApi", (req, res) => {
                 console.error(`Error: ${responseData}`);
                 res.status(500).json({ error: responseData });
             } else {
+                console.log('Send Data Success' , data, res);
+                
                 res.status(200).end();
             }
         });

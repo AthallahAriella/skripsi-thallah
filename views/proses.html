@@ -291,9 +291,11 @@
       switch (checkboxId) {
         case 'toggle_checkbox_1':
           if (checkbox.checked) {
-            sendCommand('1'); // Nyalakan lampu 1
+            sendCommand('1');
+            console.log(new Date()) // Nyalakan lampu 1
           } else {
-            sendCommand('2'); // Matikan lampu 1
+            sendCommand('2');
+            // Matikan lampu 1
           }
           break;
         case 'toggle_checkbox_2':
