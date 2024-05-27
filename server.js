@@ -202,8 +202,9 @@ app.post("/arduinoApi", (req, res) => {
     const data = req.body.data;
 
     const options = {
-        hostname: '172.20.10.2',  
-        port: 80,
+        // hostname: '172.20.10.2',
+        hostname: '213.210.21.65',    
+        port: 3000,
         path: '/control',
         method: 'POST',
         headers: {
