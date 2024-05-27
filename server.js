@@ -177,6 +177,9 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+const portku = 3000;
+const ipku = '213.210.21.65';
+
 app.use(express.json());
 
 // Serve static files from the 'public' directory
@@ -202,9 +205,10 @@ app.post("/arduinoApi", (req, res) => {
     const data = req.body.data;
 
     const options = {
-        // hostname: '172.20.10.2',
-        hostname: '213.210.21.65',    
-        port: 3000,
+        hostname: '172.20.10.2',
+        // hostname: '213.210.21.65',    
+        // port: 3000,
+        port:80,
         path: '/control',
         method: 'POST',
         headers: {
@@ -221,8 +225,12 @@ app.post("/arduinoApi", (req, res) => {
         });
 
         espRes.on('end', () => {
-            console.log("Data terkirim ->", responseData);
-            res.status(200).end();
+            if (espRes.statusCode !== 200) {
+                console.error(`Error: ${responseData}`);
+                res.status(500).json({ error: responseData });
+            } else {
+                res.status(200).end();
+            }
         });
     });
 
