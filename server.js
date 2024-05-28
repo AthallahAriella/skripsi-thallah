@@ -326,6 +326,7 @@
 //     espReq.write(data);
 //     espReq.end();
 // });
+///////////////////////////////////////////////////////////////////////////
 
 const { Server } = require("socket.io");
 const http = require("http");
@@ -364,44 +365,86 @@ app.post("/arduinoApi", (req, res) => {
         return res.status(400).json({ error: "Data is required" });
     }
 
-    const options = {
-        hostname: '172.20.10.2',
-        port: 80,
-        path: '/control',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'text/plain',
-            'Content-Length': Buffer.byteLength(data)
-        }
-    };
+    // Emit data ke client yang terhubung dengan WebSocket
+    io.emit('dataStatus', { status: 'success', data: data });
 
-    const espReq = http.request(options, (espRes) => {
-        let responseData = '';
-
-        espRes.on('data', (chunk) => {
-            responseData += chunk;
-        });
-
-        espRes.on('end', () => {
-            if (espRes.statusCode !== 200) {
-                console.error(`Error: ${responseData}`);
-                res.status(500).json({ error: responseData });
-            } else {
-                console.log('Send Data Success', data);
-                io.emit('dataStatus', { status: 'success', data: data }); // Emit event to clients
-                res.status(200).end();
-            }
-        });
-    });
-
-    espReq.on('error', (e) => {
-        console.error('Error: ', e);
-        res.status(500).json({ error: "write data error" });
-    });
-
-    espReq.write(data);
-    espReq.end();
+    res.status(200).json({ status: 'success', data: data });
 });
 
+// const { Server } = require("socket.io");
+// const http = require("http");
+// const express = require("express");
+// const path = require("path");
+
+// const app = express();
+// const server = http.createServer(app);
+// const io = new Server(server);
+
+// // Middleware untuk parsing JSON
+// app.use(express.json());
+
+// // Serve static files from the 'public' directory
+// app.use(express.static(path.join(__dirname, 'public')));
+
+// app.get("/", (req, res) => {
+//     res.sendFile(path.join(__dirname, 'views', 'proses.html'));
+// });
+
+// io.on("connection", (socket) => {
+//     console.log("connected...");
+//     socket.on("disconnect", () => {
+//         console.log("disconnect");
+//     });
+// });
+
+// server.listen(3000, () => {
+//     console.log("server on!");
+// });
+
+// app.post("/arduinoApi", (req, res) => {
+//     const data = req.body.data;
+
+//     if (!data) {
+//         return res.status(400).json({ error: "Data is required" });
+//     }
+
+//     const options = {
+//         hostname: '172.20.10.2',
+//         port: 80,
+//         path: '/control',
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'text/plain',
+//             'Content-Length': Buffer.byteLength(data)
+//         }
+//     };
+
+//     const espReq = http.request(options, (espRes) => {
+//         let responseData = '';
+
+//         espRes.on('data', (chunk) => {
+//             responseData += chunk;
+//         });
+
+//         espRes.on('end', () => {
+//             if (espRes.statusCode !== 200) {
+//                 console.error(`Error: ${responseData}`);
+//                 res.status(500).json({ error: responseData });
+//             } else {
+//                 console.log('Send Data Success', data);
+//                 io.emit('dataStatus', { status: 'success', data: data }); // Emit event to clients
+//                 res.status(200).end();
+//             }
+//         });
+//     });
+
+//     espReq.on('error', (e) => {
+//         console.error('Error: ', e);
+//         res.status(500).json({ error: "write data error" });
+//     });
+
+//     espReq.write(data);
+//     espReq.end();
+// });
 
 
