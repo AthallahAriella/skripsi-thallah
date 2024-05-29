@@ -459,7 +459,7 @@ const io = new Server(server);
 // Middleware untuk parsing JSON
 app.use(express.json());
 
-// Menyajikan file statis dari direktori 'public'
+// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/", (req, res) => {
@@ -484,11 +484,10 @@ app.post("/arduinoApi", (req, res) => {
         return res.status(400).json({ error: "Data is required" });
     }
 
-    console.log("Received data: ", data); // Log data yang diterima
-
-    // Emit event to clients
-    io.emit('dataStatus', { status: 'success', data: data });
-
-    // Mengirim respons sukses
-    res.status(200).json({ message: "Data received successfully" });
+    console.log("Received data: ", data);
+    
+    io.emit('dataStatus', { status: 'success', data: data }); // Emit event to clients
+    res.status(200).end();
 });
+
+
