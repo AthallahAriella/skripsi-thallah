@@ -467,24 +467,27 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-    console.log("connected...");
+    console.log("Client connected...");
     socket.on("disconnect", () => {
-        console.log("disconnect");
+        console.log("Client disconnected");
     });
 });
 
 server.listen(3000, () => {
-    console.log("server on!");
+    console.log("Server running on port 3000!");
 });
 
 app.post("/arduinoApi", (req, res) => {
+    console.log("POST request received at /arduinoApi");
+
     const data = req.body.data;
 
     if (!data) {
+        console.log("No data received in the request");
         return res.status(400).json({ error: "Data is required" });
     }
 
-    console.log("Received data: ", data); // Log data yang diterima
+    console.log("Data received: ", data); // Log data yang diterima
 
     // Emit event to clients
     io.emit('dataStatus', { status: 'success', data: data });
