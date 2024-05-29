@@ -484,10 +484,10 @@ app.post("/arduinoApi", (req, res) => {
         return res.status(400).json({ error: "Data is required" });
     }
 
-    console.log("Received data: ", data);
-    
+    console.log("Received data: ", data); // Log received data
+
     io.emit('dataStatus', { status: 'success', data: data }); // Emit event to clients
-    res.status(200).end();
+    res.status(200).json({ message: "Data received successfully" }); // Send a success response
 });
 
 
