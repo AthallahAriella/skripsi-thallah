@@ -475,6 +475,8 @@ server.listen(3000, () => {
     console.log("Server running on port 3000!");
 });
 
+let latestData = "";
+
 app.post("/arduinoApi", (req, res) => {
     console.log("POST request received at /arduinoApi");
 
@@ -484,9 +486,14 @@ app.post("/arduinoApi", (req, res) => {
         return res.status(400).json({ error: "Data is required" });
     }
 
+    latestData = data;
     console.log("Data received: ", data);
     io.emit('dataStatus', { status: 'success', data: data });
 
     // Log and respond to the client
     res.status(200).json({ message: "Data received successfully" });
+});
+
+app.get("/arduinoApi", (req, res) => {
+    res.status(200).json({ data: latestData });
 });
