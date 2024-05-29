@@ -447,23 +447,21 @@
 //     espReq.end();
 // });
 
-const { Server } = require("socket.io");
-const http = require("http");
-const express = require("express");
-const path = require("path");
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// Middleware untuk parsing JSON
 app.use(express.json());
-
-// Menyajikan file statis dari direktori 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'proses.html'));
+    console.log("Served proses.html");
 });
 
 io.on("connection", (socket) => {
@@ -481,17 +479,14 @@ app.post("/arduinoApi", (req, res) => {
     console.log("POST request received at /arduinoApi");
 
     const data = req.body.data;
-
     if (!data) {
         console.log("No data received in the request");
         return res.status(400).json({ error: "Data is required" });
     }
 
-    console.log("Data received: ", data); // Log data yang diterima
-
-    // Emit event to clients
+    console.log("Data received: ", data);
     io.emit('dataStatus', { status: 'success', data: data });
 
-    // Mengirim respons sukses
+    // Log and respond to the client
     res.status(200).json({ message: "Data received successfully" });
 });
