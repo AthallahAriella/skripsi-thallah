@@ -267,22 +267,7 @@
       console.log(result);
     }
 
-    // let star1nya = document.getElementById('toggle_checkbox_7')
-
-    // // star1nya.onchange = () => sendCommand('1');
-    // function handleCheckboxChange(event) {
-    //   const checkbox = event.target;
-    //   if (checkbox.checked) {
-    //     sendCommand('1'); // Nyalakan lampu
-    //   } else {
-    //     sendCommand('2'); // Matikan lampu
-    //   }
-    // }
-
-    // window.onload = () => {
-    //   const star1Checkbox = document.getElementById('toggle_checkbox_7');
-    //   star1Checkbox.onchange = handleCheckboxChange;
-    // }
+    
 
     function handleCheckboxChange(event) {
       const checkbox = event.target;
@@ -295,7 +280,6 @@
             console.log(new Date()) // Nyalakan lampu 1
           } else {
             sendCommand('2');
-            // Matikan lampu 1
           }
           break;
         case 'toggle_checkbox_2':
@@ -305,14 +289,35 @@
             sendCommand('4'); // Matikan lampu 2
           }
           break;
-        case 'toggle_checkbox_3':
+        case 'toggle_checkbox_4':
           if (checkbox.checked) {
             sendCommand('5'); // Nyalakan lampu 3
           } else {
             sendCommand('6'); // Matikan lampu 3
           }
           break;
-        default:
+          case 'toggle_checkbox_5':
+          if (checkbox.checked) {
+            sendCommand('7');
+          } else {
+            sendCommand('8');
+          }
+          break;
+          case 'toggle_checkbox_6':
+          if (checkbox.checked) {
+            sendCommand('9');
+          } else {
+            sendCommand('10');
+          }
+          break;
+          case 'toggle_checkbox_7':
+          if (checkbox.checked) {
+            sendCommand('11');
+          } else {
+            sendCommand('12');
+          }
+          break;
+         default:
           console.log('Unknown checkbox ID');
       }
     }
@@ -323,9 +328,6 @@
         checkbox.onchange = handleCheckboxChange;
       });
     }
-   
-    
-
 
         document.querySelectorAll('.overlay').forEach(overlay => {
             const checkbox = overlay.querySelector('input[type="checkbox"]');
