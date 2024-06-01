@@ -185,15 +185,25 @@
                 </label>
             </div>
         </div>
-        <div class="box">
-            <div class="overlay">
-    
-            </div>
-        </div>
+       
     </div>
     <div class="container">
         <div class="box">
-            <img src="Images/Kamar 2.jpg" alt="Gambar 4">
+            <img src="Images/Kamar 2.jpg" alt="Gambar 3">
+            <div class="overlay">
+                <input type="checkbox" id="toggle_checkbox_3">
+                <label for="toggle_checkbox_3">
+                    <div id="star">
+                        <div class="star" id="star-1">★</div>
+                        <div class="star" id="star-2">★</div>
+                    </div>
+                    <div id="moon"></div>
+                </label>
+            </div>
+        </div>
+        
+        <div class="box">
+            <img src="Images/Dapur.jpg" alt="Gambar 4">
             <div class="overlay">
                 <input type="checkbox" id="toggle_checkbox_4">
                 <label for="toggle_checkbox_4">
@@ -205,46 +215,7 @@
                 </label>
             </div>
         </div>
-        <div class="box">
-            <img src="Images/Kamar mandi.jpg" alt="Gambar 5">
-            <div class="overlay">
-                <input type="checkbox" id="toggle_checkbox_5">
-                <label for="toggle_checkbox_5">
-                    <div id="star">
-                        <div class="star" id="star-1">★</div>
-                        <div class="star" id="star-2">★</div>
-                    </div>
-                    <div id="moon"></div>
-                </label>
-            </div>
-        </div>
-        <div class="box">
-            <img src="Images/Dapur.jpg" alt="Gambar 6">
-            <div class="overlay">
-                <input type="checkbox" id="toggle_checkbox_6">
-                <label for="toggle_checkbox_6">
-                    <div id="star">
-                        <div class="star" id="star-1">★</div>
-                        <div class="star" id="star-2">★</div>
-                    </div>
-                    <div id="moon"></div>
-                </label>
-            </div>
-        </div>
-        <div class="box">
-            <img src="Images/Mobil.jpg" alt="Gambar Mobil" class="mobil-img">
-            <div class="overlay">
-                <input type="checkbox" id="toggle_checkbox_7">
-                <label for="toggle_checkbox_7">
-                    <div id="star">
-                        <div class="star" id="star-1">★</div>
-                        <div class="star" id="star-2">★</div>
-                    </div>
-                    <div id="moon"></div>
-                </label>
-            </div>
-        </div>
-    </div>
+        
 
     <script>
     async function sendCommand(command) {
@@ -282,32 +253,18 @@
             sendCommand('4'); // Matikan lampu 2
           }
           break;
-        case 'toggle_checkbox_4':
+        case 'toggle_checkbox_3':
           if (checkbox.checked) {
             sendCommand('5'); // Nyalakan lampu 3
           } else {
             sendCommand('6'); // Matikan lampu 3
           }
           break;
-          case 'toggle_checkbox_5':
+          case 'toggle_checkbox_4':
           if (checkbox.checked) {
             sendCommand('7');
           } else {
             sendCommand('8');
-          }
-          break;
-          case 'toggle_checkbox_6':
-          if (checkbox.checked) {
-            sendCommand('9');
-          } else {
-            sendCommand('10');
-          }
-          break;
-          case 'toggle_checkbox_7':
-          if (checkbox.checked) {
-            sendCommand('11');
-          } else {
-            sendCommand('12');
           }
           break;
          default:
