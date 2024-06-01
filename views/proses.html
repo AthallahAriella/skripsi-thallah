@@ -267,52 +267,52 @@
       const checkboxId = checkbox.id;
 
       switch (checkboxId) {
-  case 'toggle_checkbox_1':
-    if (checkbox.checked) {
-      sendCommand("DATA:1"); // Nyalakan lampu 1
-    } else {
-      sendCommand("DATA:2"); // Matikan lampu 1
-    }
-    break;
-  case 'toggle_checkbox_2':
-    if (checkbox.checked) {
-      sendCommand("DATA:3"); // Nyalakan lampu 2
-    } else {
-      sendCommand("DATA:4"); // Matikan lampu 2
-    }
-    break;
-  case 'toggle_checkbox_4':
-    if (checkbox.checked) {
-      sendCommand("DATA:5"); // Nyalakan lampu 3
-    } else {
-      sendCommand("DATA:6"); // Matikan lampu 3
-    }
-    break;
-  case 'toggle_checkbox_5':
-    if (checkbox.checked) {
-      sendCommand("DATA:7"); // Nyalakan lampu 4
-    } else {
-      sendCommand("DATA:8"); // Matikan lampu 4
-    }
-    break;
-  case 'toggle_checkbox_6':
-    if (checkbox.checked) {
-      sendCommand("DATA:9"); // Nyalakan lampu 5
-    } else {
-      sendCommand("DATA:10"); // Matikan lampu 5
-    }
-    break;
-  case 'toggle_checkbox_7':
-    if (checkbox.checked) {
-      sendCommand("DATA:11"); // Nyalakan lampu 6
-    } else {
-      sendCommand("DATA:12"); // Matikan lampu 6
-    }
-    break;
-  default:
-    console.log('Unknown checkbox ID');
-}
-
+        case 'toggle_checkbox_1':
+          if (checkbox.checked) {
+            sendCommand("1");
+            console.log(new Date()) // Nyalakan lampu 1
+          } else {
+            sendCommand("2");
+          }
+          break;
+        case 'toggle_checkbox_2':
+          if (checkbox.checked) {
+            sendCommand("3"); // Nyalakan lampu 2
+          } else {
+            sendCommand("4"); // Matikan lampu 2
+          }
+          break;
+        case 'toggle_checkbox_4':
+          if (checkbox.checked) {
+            sendCommand("5"); // Nyalakan lampu 3
+          } else {
+            sendCommand("6"); // Matikan lampu 3
+          }
+          break;
+          case 'toggle_checkbox_5':
+          if (checkbox.checked) {
+            sendCommand("7");
+          } else {
+            sendCommand("8");
+          }
+          break;
+          case 'toggle_checkbox_6':
+          if (checkbox.checked) {
+            sendCommand("9");
+          } else {
+            sendCommand("10");
+          }
+          break;
+          case 'toggle_checkbox_7':
+          if (checkbox.checked) {
+            sendCommand("11");
+          } else {
+            sendCommand("12");
+          }
+          break;
+         default:
+          console.log('Unknown checkbox ID');
+      }
     }
 
     window.onload = () => {
