@@ -294,22 +294,7 @@
             });
         });
 
-        socket.on('esp32Status', (status) => {
-            if (!status.active) {
-                alert("ESP32 tidak aktif");
-            }
-        });
-
-        // Check ESP32 status periodically
-        setInterval(() => {
-            fetch('/esp32Status')
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.active) {
-                        alert("ESP32 tidak aktif");
-                    }
-                });
-        }, 60000);
+        
     </script>
 </body>
 </html>
