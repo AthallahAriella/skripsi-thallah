@@ -407,6 +407,7 @@
 
 
 
+
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -436,7 +437,6 @@ server.listen(3000, () => {
 });
 
 let latestData = "";
-let esp32Active = true;
 
 app.post("/arduinoApi", (req, res) => {
     console.log("POST request received at /arduinoApi");
@@ -448,7 +448,6 @@ app.post("/arduinoApi", (req, res) => {
     }
 
     latestData = data;
-    esp32Active = true;
     console.log("Data received: ", data);
     io.emit('dataStatus', { status: 'success', data: data });
 
@@ -459,14 +458,3 @@ app.post("/arduinoApi", (req, res) => {
 app.get("/arduinoApi", (req, res) => {
     res.status(200).json({ data: latestData });
 });
-
-// Endpoint to check ESP32 status
-app.get("/esp32Status", (req, res) => {
-    res.status(200).json({ active: esp32Active });
-});
-
-// Check ESP32 status every minute
-setInterval(() => {
-    esp32Active = false;
-    io.emit('esp32Status', { active: esp32Active });
-}, 60000); // 60 seconds
