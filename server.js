@@ -425,6 +425,8 @@ app.get("/", (req, res) => {
     console.log("Served proses.html");
     console.log("Client connected...");
     
+    console.log("Client disconnected");
+    
 });
 
 io.on("connection", (socket) => {
