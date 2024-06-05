@@ -423,10 +423,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'proses.html'));
     console.log("Served proses.html");
-    console.log("Client connected...");
-    
-    console.log("Client disconnected");
-    
+
 });
 
 io.on("connection", (socket) => {
