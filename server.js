@@ -431,7 +431,13 @@ io.on("connection", (socket) => {
     socket.on("disconnect", () => {
         console.log("Client disconnected");
     });
+    socket.on("command", (data) => {
+        const timestamp = new Date();
+        console.log(`Command received at ${timestamp}: ${data}`);
+        // Kirim data ke ESP32 melalui HTTP atau WebSocket
+    });
 });
+
 
 server.listen(3000, () => {
     console.log("Server running on port 3000!");
