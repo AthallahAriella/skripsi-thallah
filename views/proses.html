@@ -216,9 +216,9 @@
             </div>
         </div>
         
-        <script src="/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io();
+        const socket = io('ws://213.210.21.65:3000');
 
         socket.on('connect', () => {
             console.log('Connected to server');
