@@ -469,7 +469,6 @@
 //     res.status(200).json({ data: latestData });
 // });
 
-
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -495,15 +494,13 @@ io.on("connection", (socket) => {
     });
 
     socket.on("command", (data) => {
-        const timestamp = new Date();
-        console.log(`Command received at ${timestamp}: ${data}`);
-
+        console.log(`Command received: ${data}`);
         // Kirim data ke ESP32 melalui WebSocket
-        // Misalnya, kirimkan data langsung ke semua klien
-        io.emit("dataToESP", data);
+        // Misalnya, Anda dapat meneruskan data ke Serial2 di ESP32
+        // Pastikan untuk menyesuaikan logika ini dengan sketsa ESP32 Anda
+        // Contoh sederhana:
+        // Serial2.write(data);
     });
-
-    // Tambahkan event handler lainnya sesuai kebutuhan
 });
 
 server.listen(3000, () => {
