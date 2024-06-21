@@ -443,7 +443,7 @@ server.listen(3000, () => {
     console.log("Server running on port 3000!");
 });
 
-let latestData = "";
+let latestData = "as";
 
 app.post("/arduinoApi", (req, res) => {
     console.log("POST request received at /arduinoApi");
