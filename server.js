@@ -468,14 +468,14 @@
 // app.get("/arduinoApi", (req, res) => {
 //     res.status(200).json({ data: latestData });
 // });
-const WebSocket = require('ws');
+
 const express = require('express');
 const path = require('path');
+const WebSocket = require('ws');
 
 const app = express();
 const port = 3000;
 
-// Setup Express to serve static files and the HTML file
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/", (req, res) => {
@@ -483,29 +483,34 @@ app.get("/", (req, res) => {
     console.log("Served coba.html");
 });
 
-// Create a WebSocket server
 const server = app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 
 const wss = new WebSocket.Server({ server });
 
+const clients = [];
+
 wss.on('connection', (ws) => {
     console.log('Client connected');
+    clients.push(ws);
 
     ws.on('message', (message) => {
-        console.log('Received:', message);
+        console.log('Received:', message.toString()); // Convert buffer to string
 
-        // Kirim pesan ke semua klien yang terhubung
-        wss.clients.forEach((client) => {
-            if (client !== ws && client.readyState === WebSocket.OPEN) {
-                client.send(message);
+        clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message.toString()); // Convert buffer to string before sending
             }
         });
     });
 
     ws.on('close', () => {
         console.log('Client disconnected');
+        const index = clients.indexOf(ws);
+        if (index > -1) {
+            clients.splice(index, 1);
+        }
     });
 
     ws.on('error', (error) => {
