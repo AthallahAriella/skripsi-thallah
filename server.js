@@ -468,9 +468,9 @@
 // app.get("/arduinoApi", (req, res) => {
 //     res.status(200).json({ data: latestData });
 // });
+const WebSocket = require('ws');
 const express = require('express');
 const path = require('path');
-const WebSocket = require('ws');
 
 const app = express();
 const port = 3000;
@@ -490,18 +490,15 @@ const server = app.listen(port, () => {
 
 const wss = new WebSocket.Server({ server });
 
-const clients = [];
-
 wss.on('connection', (ws) => {
     console.log('Client connected');
-    clients.push(ws);
 
     ws.on('message', (message) => {
         console.log('Received:', message);
-        
+
         // Kirim pesan ke semua klien yang terhubung
-        clients.forEach((client) => {
-            if (client.readyState === WebSocket.OPEN) {
+        wss.clients.forEach((client) => {
+            if (client !== ws && client.readyState === WebSocket.OPEN) {
                 client.send(message);
             }
         });
@@ -509,10 +506,6 @@ wss.on('connection', (ws) => {
 
     ws.on('close', () => {
         console.log('Client disconnected');
-        const index = clients.indexOf(ws);
-        if (index > -1) {
-            clients.splice(index, 1);
-        }
     });
 
     ws.on('error', (error) => {
