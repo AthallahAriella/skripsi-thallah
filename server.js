@@ -479,8 +479,8 @@ const port = 3000;
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'proses.html'));
-    console.log("Served proses.html");
+    res.sendFile(path.join(__dirname, 'views', 'coba.html'));
+    console.log("Served coba.html");
 });
 
 // Create a WebSocket server
