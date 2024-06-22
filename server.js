@@ -514,6 +514,10 @@ wss.on('connection', (ws) => {
             clients.splice(index, 1);
         }
     });
+
+    ws.on('error', (error) => {
+        console.log('WebSocket Error:', error);
+    });
 });
 
 console.log('WebSocket server is listening on port 3000');

@@ -17,6 +17,10 @@
             console.log('Disconnected from WebSocket server');
         };
 
+        socket.onerror = function(error) {
+            console.log('WebSocket Error:', error);
+        };
+
         function sendCommand(command) {
             if (socket.readyState === WebSocket.OPEN) {
                 socket.send(command);
