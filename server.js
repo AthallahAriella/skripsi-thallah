@@ -468,41 +468,52 @@
 // app.get("/arduinoApi", (req, res) => {
 //     res.status(200).json({ data: latestData });
 // });
-
 const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
 const path = require('path');
+const WebSocket = require('ws');
 
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
+const port = 3000;
 
-app.use(express.json());
+// Setup Express to serve static files and the HTML file
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'proses.html'));
-    console.log("Served proses.html");
+    res.sendFile(path.join(__dirname, 'views', 'coba.html'));
+    console.log("Served coba.html");
 });
 
-io.on("connection", (socket) => {
-    console.log("Client connected...");
+// Create a WebSocket server
+const server = app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
 
-    socket.on("disconnect", () => {
-        console.log("Client disconnected");
+const wss = new WebSocket.Server({ server });
+
+const clients = [];
+
+wss.on('connection', (ws) => {
+    console.log('Client connected');
+    clients.push(ws);
+
+    ws.on('message', (message) => {
+        console.log('Received:', message);
+        
+        // Kirim pesan ke semua klien yang terhubung
+        clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message);
+            }
+        });
     });
 
-    socket.on("command", (data) => {
-        console.log(`Command received: ${data}`);
-        // Kirim data ke ESP32 melalui WebSocket
-        // Misalnya, Anda dapat meneruskan data ke Serial2 di ESP32
-        // Pastikan untuk menyesuaikan logika ini dengan sketsa ESP32 Anda
-        // Contoh sederhana:
-        // Serial2.write(data);
+    ws.on('close', () => {
+        console.log('Client disconnected');
+        const index = clients.indexOf(ws);
+        if (index > -1) {
+            clients.splice(index, 1);
+        }
     });
 });
 
-server.listen(3000, () => {
-    console.log("Server running on port 3000!");
-});
+console.log('WebSocket server is listening on port 3000');
