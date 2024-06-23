@@ -469,11 +469,7 @@
 //     res.status(200).json({ data: latestData });
 // });
 
-
-
-// 
-
-//-----------------------------
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const express = require('express');
 const path = require('path');
 const WebSocket = require('ws');
@@ -501,17 +497,11 @@ wss.on('connection', (ws) => {
     clients.push(ws);
 
     ws.on('message', (message) => {
-        const timestamp = Date.now();
         console.log('Received:', message.toString()); // Convert buffer to string
-
-        const dataWithTimestamp = JSON.stringify({
-            message: message.toString(),
-            timestamp: timestamp
-        });
 
         clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
-                client.send(dataWithTimestamp); // Convert buffer to string before sending
+                client.send(message.toString()); // Convert buffer to string before sending
             }
         });
     });
@@ -530,4 +520,3 @@ wss.on('connection', (ws) => {
 });
 
 console.log('WebSocket server is listening on port 3000');
-
