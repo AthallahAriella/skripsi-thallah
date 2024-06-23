@@ -469,8 +469,8 @@
 //     res.status(200).json({ data: latestData });
 // });
 
-// 
-//------------------------------------
+
+
 const express = require('express');
 const path = require('path');
 const WebSocket = require('ws');
@@ -491,27 +491,28 @@ const server = app.listen(port, () => {
 
 const wss = new WebSocket.Server({ server });
 
-let startTimeFromUser; // Variabel untuk menyimpan waktu mulai dari pengguna
+const clients = [];
 
 wss.on('connection', (ws) => {
     console.log('Client connected');
+    clients.push(ws);
 
     ws.on('message', (message) => {
-        console.log('Received:', message.toString());
+        console.log('Received:', message.toString()); // Convert buffer to string
 
-        // Catat waktu mulai dari pengguna saat menerima pesan dari browser
-        startTimeFromUser = Date.now();
-
-        // Kirim pesan dan waktu mulai ke semua klien termasuk ESP32
-        wss.clients.forEach((client) => {
+        clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
-                client.send(message.toString()); // Kirim pesan ke klien
+                client.send(message.toString()); // Convert buffer to string before sending
             }
         });
     });
 
     ws.on('close', () => {
         console.log('Client disconnected');
+        const index = clients.indexOf(ws);
+        if (index > -1) {
+            clients.splice(index, 1);
+        }
     });
 
     ws.on('error', (error) => {
