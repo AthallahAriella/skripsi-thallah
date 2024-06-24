@@ -557,3 +557,47 @@ const server = app.listen(port, () => {
 
 console.log('WebSocket server is listening on port 3000');
 
+//====================MQTT=================================
+
+// const mqtt = require('mqtt');
+// const express = require('express');
+// const app = express();
+// const path = require('path');
+
+// const MQTT_SERVER = 'mqtt://mqtt-broker-url'; // Ganti dengan URL MQTT broker
+// const MQTT_TOPIC = 'lamp/control'; // Topik MQTT untuk kontrol lampu
+
+// // Inisialisasi server MQTT
+// const client = mqtt.connect(MQTT_SERVER);
+
+// client.on('connect', () => {
+//   console.log('Connected to MQTT broker');
+//   client.subscribe(MQTT_TOPIC, (err) => {
+//     if (err) {
+//       console.error('Error subscribing to topic', err);
+//     }
+//   });
+// });
+
+// client.on('message', (topic, message) => {
+//   console.log(`Received message on topic ${topic}: ${message.toString()}`);
+//   // Di sini bisa ditambahkan logika untuk mengirim perintah ke Arduino
+//   // Misalnya, mengirimkan pesan ke perangkat ESP32 untuk mengontrol lampu
+// });
+
+// // Middleware untuk menyajikan file statis dari direktori 'public'
+// app.use(express.static(path.join(__dirname, 'public')));
+
+// // Endpoint untuk menerima perintah dari web ke ESP32 melalui MQTT
+// app.post('/arduinoApi', (req, res) => {
+//   const { data } = req.body;
+//   client.publish(MQTT_TOPIC, data);
+//   res.send(`Command '${data}' sent to MQTT broker`);
+// });
+
+// // Jalankan server pada port tertentu
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
+
