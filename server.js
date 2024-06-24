@@ -470,53 +470,85 @@
 // });
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// const express = require('express');
+// const path = require('path');
+// const WebSocket = require('ws');
+
+// const app = express();
+// const port = 3000;
+
+// app.use(express.static(path.join(__dirname, 'public')));
+
+// app.get("/", (req, res) => {
+//     res.sendFile(path.join(__dirname, 'views', 'coba.html'));
+//     console.log("Served coba.html");
+// });
+
+// const server = app.listen(port, () => {
+//     console.log(`Server running on port ${port}`);
+// });
+
+// const wss = new WebSocket.Server({ server });
+
+// const clients = [];
+
+// wss.on('connection', (ws) => {
+//     console.log('Client connected');
+//     clients.push(ws);
+
+//     ws.on('message', (message) => {
+//         console.log('Received:', message.toString()); // Convert buffer to string
+
+//         clients.forEach((client) => {
+//             if (client.readyState === WebSocket.OPEN) {
+//                 client.send(message.toString()); // Convert buffer to string before sending
+//             }
+//         });
+//     });
+
+//     ws.on('close', () => {
+//         console.log('Client disconnected');
+//         const index = clients.indexOf(ws);
+//         if (index > -1) {
+//             clients.splice(index, 1);
+//         }
+//     });
+
+//     ws.on('error', (error) => {
+//         console.log('WebSocket Error:', error);
+//     });
+// });
+
+// console.log('WebSocket server is listening on port 3000');
+
+
+//+++++++HTTP+++++++
 const express = require('express');
 const path = require('path');
-const WebSocket = require('ws');
 
 const app = express();
 const port = 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json()); // Tambahkan middleware untuk parsing JSON
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'coba.html'));
     console.log("Served coba.html");
 });
 
+let latestMessage = ''; // Variabel untuk menyimpan pesan terbaru
+
+app.post('/message', (req, res) => {
+    latestMessage = req.body.message;
+    console.log('Received:', latestMessage);
+    res.sendStatus(200); // Kirim status sukses
+});
+
+app.get('/message', (req, res) => {
+    res.json({ message: latestMessage }); // Kirim pesan terbaru sebagai JSON
+});
+
 const server = app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
-
-const wss = new WebSocket.Server({ server });
-
-const clients = [];
-
-wss.on('connection', (ws) => {
-    console.log('Client connected');
-    clients.push(ws);
-
-    ws.on('message', (message) => {
-        console.log('Received:', message.toString()); // Convert buffer to string
-
-        clients.forEach((client) => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(message.toString()); // Convert buffer to string before sending
-            }
-        });
-    });
-
-    ws.on('close', () => {
-        console.log('Client disconnected');
-        const index = clients.indexOf(ws);
-        if (index > -1) {
-            clients.splice(index, 1);
-        }
-    });
-
-    ws.on('error', (error) => {
-        console.log('WebSocket Error:', error);
-    });
-});
-
-console.log('WebSocket server is listening on port 3000');
