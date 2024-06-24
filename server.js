@@ -533,7 +533,7 @@ const port = 3000;
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
-let latestMessage = ''; 
+let latestMessage = '';
 let latestTimestamp = 0;
 
 app.get("/", (req, res) => {
@@ -545,7 +545,7 @@ app.post('/message', (req, res) => {
     latestMessage = req.body.message;
     latestTimestamp = Date.now();
     console.log('Received:', latestMessage, 'at', latestTimestamp, 'ms');
-    res.sendStatus(200); 
+    res.sendStatus(200);
 });
 
 app.get('/arduinoApi', (req, res) => {
@@ -555,6 +555,7 @@ app.get('/arduinoApi', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
 
 
 
