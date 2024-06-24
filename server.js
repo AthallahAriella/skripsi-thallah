@@ -526,35 +526,54 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 const port = 3000;
 
+// Middleware
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
-let latestMessage = ''; 
+// In-memory storage for latest message and timestamp
+let latestMessage = '';
 let latestTimestamp = 0;
 
+// Serve HTML file
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'coba.html'));
     console.log("Served coba.html");
 });
 
+// Handle POST request to update latest message
 app.post('/message', (req, res) => {
+    if (!req.body || !req.body.message) {
+        return res.status(400).send('Invalid request: Message missing');
+    }
+
     latestMessage = req.body.message;
     latestTimestamp = Date.now();
     console.log('Received:', latestMessage, 'at', latestTimestamp, 'ms');
-    res.sendStatus(200); 
+    res.sendStatus(200);
 });
 
+// Provide latest message and timestamp to Arduino
 app.get('/arduinoApi', (req, res) => {
     res.json({ data: latestMessage, timestamp: latestTimestamp });
 });
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
+// Start server
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
 
 
 
