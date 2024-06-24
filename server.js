@@ -533,23 +533,23 @@ const port = 3000;
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
+let latestMessage = ''; 
+let latestTimestamp = 0;
+
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'coba.html'));
     console.log("Served coba.html");
 });
 
-let latestMessage = ''; // Variabel untuk menyimpan pesan terbaru
-let latestTimestamp = 0; // Variabel untuk menyimpan timestamp terbaru dalam ms
-
 app.post('/message', (req, res) => {
     latestMessage = req.body.message;
     latestTimestamp = Date.now();
     console.log('Received:', latestMessage, 'at', latestTimestamp, 'ms');
-    res.sendStatus(200); // Kirim status sukses
+    res.sendStatus(200); 
 });
 
 app.get('/arduinoApi', (req, res) => {
-    res.json({ data: latestMessage, timestamp: latestTimestamp }); // Kirim data dan timestamp terbaru sebagai JSON
+    res.json({ data: latestMessage, timestamp: latestTimestamp });
 });
 
 app.listen(port, () => {
