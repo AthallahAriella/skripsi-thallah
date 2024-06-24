@@ -541,9 +541,9 @@ app.get("/", (req, res) => {
 let latestMessage = ''; // Variabel untuk menyimpan pesan terbaru
 let latestTimestamp = 0; // Variabel untuk menyimpan timestamp terbaru dalam ms
 
-app.post('/arduinoApi', (req, res) => {
-    latestMessage = req.body.data;
-    latestTimestamp = req.body.timestamp;
+app.post('/message', (req, res) => {
+    latestMessage = req.body.message;
+    latestTimestamp = Date.now();
     console.log('Received:', latestMessage, 'at', latestTimestamp, 'ms');
     res.sendStatus(200); // Kirim status sukses
 });
@@ -552,11 +552,10 @@ app.get('/arduinoApi', (req, res) => {
     res.json({ data: latestMessage, timestamp: latestTimestamp }); // Kirim data dan timestamp terbaru sebagai JSON
 });
 
-const server = app.listen(port, () => {
+app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 
-module.exports = server; // Export server untuk pengujian (opsional)
 
 
 
