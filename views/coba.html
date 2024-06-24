@@ -68,10 +68,8 @@
 <head>
     <title>Control Lamp</title>
     <script>
-        const serverUrl = 'http://213.210.21.65:3000/arduinoApi';
-
         function sendCommand(command) {
-            fetch(serverUrl, {
+            fetch('http://213.210.21.65:3000/arduinoApi', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -120,6 +118,7 @@
     <input type="checkbox" id="toggle_checkbox_4" onchange="handleCheckboxChange(event)"> Lamp 4<br>
 </body>
 </html>
+
 
 
 
