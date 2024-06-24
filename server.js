@@ -531,7 +531,7 @@ const app = express();
 const port = 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json()); // Middleware untuk parsing JSON
+app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'coba.html'));
@@ -557,6 +557,7 @@ const server = app.listen(port, () => {
 });
 
 module.exports = server; // Export server untuk pengujian (opsional)
+
 
 
 //====================MQTT=================================
