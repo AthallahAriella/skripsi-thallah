@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Control Lamp</title>
@@ -60,4 +60,61 @@
     <input type="checkbox" id="toggle_checkbox_3" onchange="handleCheckboxChange(event)"> Lamp 3<br>
     <input type="checkbox" id="toggle_checkbox_4" onchange="handleCheckboxChange(event)"> Lamp 4<br>
 </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Control Lamp</title>
+    <script>
+        function sendCommand(command) {
+            fetch('/message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: command }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                console.log('Command sent:', command);
+            })
+            .catch(error => {
+                console.error('Error sending command:', error);
+            });
+        }
+
+        function handleCheckboxChange(event) {
+            const checkbox = event.target;
+            const checkboxId = checkbox.id;
+
+            switch (checkboxId) {
+                case 'toggle_checkbox_1':
+                    sendCommand(checkbox.checked ? '1' : '2');
+                    break;
+                case 'toggle_checkbox_2':
+                    sendCommand(checkbox.checked ? '3' : '4');
+                    break;
+                case 'toggle_checkbox_3':
+                    sendCommand(checkbox.checked ? '7' : '8');
+                    break;
+                case 'toggle_checkbox_4':
+                    sendCommand(checkbox.checked ? '5' : '6');
+                    break;
+                default:
+                    console.log('Unknown checkbox ID');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Control Lamp</h1>
+    <input type="checkbox" id="toggle_checkbox_1" onchange="handleCheckboxChange(event)"> Lamp 1<br>
+    <input type="checkbox" id="toggle_checkbox_2" onchange="handleCheckboxChange(event)"> Lamp 2<br>
+    <input type="checkbox" id="toggle_checkbox_3" onchange="handleCheckboxChange(event)"> Lamp 3<br>
+    <input type="checkbox" id="toggle_checkbox_4" onchange="handleCheckboxChange(event)"> Lamp 4<br>
+</body>
 </html>
+
