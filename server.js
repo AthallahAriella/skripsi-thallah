@@ -469,7 +469,7 @@
 //     res.status(200).json({ data: latestData });
 // });
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++websocket++++++++++++++++++++++++++++++++++++++++++++++++
 // const express = require('express');
 // const path = require('path');
 // const WebSocket = require('ws');
@@ -543,7 +543,7 @@ let latestMessage = ''; // Variabel untuk menyimpan pesan terbaru
 
 app.post('/message', (req, res) => {
     latestMessage = req.body.message;
-    console.log('Received:', latestMessage);
+    console.log(`data received: ${latestMessage}`);
     res.sendStatus(200); // Kirim status sukses
 });
 
@@ -551,9 +551,10 @@ app.get('/message', (req, res) => {
     res.json({ message: latestMessage }); // Kirim pesan terbaru sebagai JSON
 });
 
-const server = app.listen(port, () => {
+app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
 
 
 // const express = require('express');
