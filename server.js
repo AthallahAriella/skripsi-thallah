@@ -551,11 +551,10 @@ app.post('/arduinoApi', (req, res) => {
     res.sendStatus(200); // Kirim status sukses
 });
 
-const server = app.listen(port, () => {
+app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 
-console.log('WebSocket server is listening on port 3000');
 
 
 
