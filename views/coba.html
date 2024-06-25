@@ -69,12 +69,12 @@
     <title>Control Lamp</title>
     <script>
         function sendCommand(command) {
-            fetch('http://213.210.21.65:3000/arduinoApi', {
+            fetch('http://213.210.21.65:3000/message', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ data: command }),
+                body: JSON.stringify({ message: command }),
             })
             .then(response => {
                 if (!response.ok) {
