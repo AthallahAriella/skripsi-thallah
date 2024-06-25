@@ -525,36 +525,38 @@
 //+++++++HTTP+++++++
 const express = require('express');
 const path = require('path');
-const bodyParser = require('body-parser');
 
 const app = express();
 const port = 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json());
-
-let latestMessage = '';
-let latestTimestamp = 0;
+app.use(express.json()); // Middleware untuk parsing JSON
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'coba.html'));
     console.log("Served coba.html");
 });
 
-app.post('/message', (req, res) => {
-    latestMessage = req.body.message;
-    latestTimestamp = Date.now();
-    console.log('Received:', latestMessage, 'at', latestTimestamp, 'ms');
-    res.sendStatus(200);
-});
+let latestData = ''; // Variabel untuk menyimpan data terbaru dari ESP32
 
+// Handler untuk menerima permintaan GET dari ESP32 pada endpoint /arduinoApi
 app.get('/arduinoApi', (req, res) => {
-    res.json({ data: latestMessage, timestamp: latestTimestamp });
+    res.json({ data: latestData }); // Kirimkan data terbaru sebagai respons JSON
 });
 
-app.listen(port, () => {
+// Handler untuk menerima permintaan POST dari ESP32 pada endpoint /arduinoApi
+app.post('/arduinoApi', (req, res) => {
+    latestData = req.body.data; // Ambil data dari body permintaan POST
+    console.log('Received data from ESP32:', latestData);
+    res.sendStatus(200); // Kirim status sukses
+});
+
+const server = app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
+console.log('WebSocket server is listening on port 3000');
+
 
 
 
