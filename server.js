@@ -541,13 +541,16 @@ let latestData = ''; // Variabel untuk menyimpan data terbaru dari ESP32
 
 // Handler untuk menerima permintaan GET dari ESP32 pada endpoint /arduinoApi
 app.get('/arduinoApi', (req, res) => {
-    res.json({ data: latestData, serverReceiveTime: Date.now() }); // Kirimkan data terbaru bersama dengan timestamp server
+    const serverReceiveTime = Date.now();
+    res.json({ data: latestData, serverReceiveTime: serverReceiveTime }); // Kirimkan data terbaru sebagai respons JSON
+    console.log(`Sent data to ESP32 at ${serverReceiveTime}`);
 });
 
 // Handler untuk menerima permintaan POST dari ESP32 pada endpoint /arduinoApi
 app.post('/arduinoApi', (req, res) => {
+    const serverReceiveTime = Date.now();
     latestData = req.body.data; // Ambil data dari body permintaan POST
-    console.log('Received data from ESP32:', latestData);
+    console.log(`Received data from ESP32 at ${serverReceiveTime}:`, latestData);
     res.sendStatus(200); // Kirim status sukses
 });
 
@@ -555,6 +558,7 @@ const server = app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 
+console.log('WebSocket server is listening on port 3000');
 
 
 
