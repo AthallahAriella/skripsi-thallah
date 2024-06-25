@@ -69,12 +69,12 @@
     <title>Control Lamp</title>
     <script>
         function sendCommand(command) {
-            fetch('/message', {
+            fetch('http://213.210.21.65:3000/arduinoApi', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ message: command }),
+                body: JSON.stringify({ data: command }),
             })
             .then(response => {
                 if (!response.ok) {
@@ -118,6 +118,7 @@
     <input type="checkbox" id="toggle_checkbox_4" onchange="handleCheckboxChange(event)"> Lamp 4<br>
 </body>
 </html>
+
 
 
 
