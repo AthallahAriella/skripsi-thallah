@@ -552,10 +552,11 @@ app.post('/arduinoApi', (req, res) => {
 });
 
 const server = app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+    console.log(Server running on port ${port});
 });
 
 console.log('WebSocket server is listening on port 3000');
+
 
 
 
