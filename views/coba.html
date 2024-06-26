@@ -69,13 +69,12 @@
     <title>Control Lamp</title>
     <script>
         function sendCommand(command) {
-            const startTime = Date.now(); // Catat waktu saat perintah dikirim dalam epoch time
-            fetch('http://213.210.21.65:3000/message', {
+            fetch('http://213.210.21.65:3000/message', {  // Pastikan endpoint sesuai dengan yang ada di server
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ message: command, startTime: startTime }),
+                body: JSON.stringify({ message: command }),  // Properti body disesuaikan
             })
             .then(response => {
                 if (!response.ok) {
@@ -94,10 +93,10 @@
 
             switch (checkboxId) {
                 case 'toggle_checkbox_1':
-                    sendCommand(checkbox.checked ? '1' : '2');
+                    sendCommand(checkbox.checked ? '0' : '1');
                     break;
                 case 'toggle_checkbox_2':
-                    sendCommand(checkbox.checked ? '3' : '4');
+                    sendCommand(checkbox.checked ? '2' : '3');
                     break;
                 case 'toggle_checkbox_3':
                     sendCommand(checkbox.checked ? '7' : '8');
@@ -119,6 +118,7 @@
     <input type="checkbox" id="toggle_checkbox_4" onchange="handleCheckboxChange(event)"> Lamp 4<br>
 </body>
 </html>
+
 
 
 

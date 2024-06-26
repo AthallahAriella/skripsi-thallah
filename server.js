@@ -538,12 +538,10 @@ app.get("/", (req, res) => {
 });
 
 let latestMessage = ''; // Variabel untuk menyimpan pesan terbaru
-let startTime = 0; // Variabel untuk menyimpan waktu mulai
 
 app.post('/message', (req, res) => {
     latestMessage = req.body.message;
-    startTime = req.body.startTime;
-    console.log(`Data received: ${latestMessage}`);
+    console.log(`data received: ${latestMessage}`);
     res.sendStatus(200); // Kirim status sukses
 });
 
@@ -551,16 +549,10 @@ app.get('/message', (req, res) => {
     res.json({ message: latestMessage }); // Kirim pesan terbaru sebagai JSON
 });
 
-app.post('/response-time', (req, res) => {
-    const responseTime = req.body.responseTime;
-    const totalTime = Date.now() - startTime; // Hitung selisih waktu dalam milidetik
-    console.log(`Waktu yang diperlukan untuk menerima perintah: ${totalTime} ms`);
-    res.sendStatus(200); // Kirim status sukses
-});
-
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
 
 
 
