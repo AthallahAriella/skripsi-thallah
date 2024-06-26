@@ -577,7 +577,7 @@ app.post('/message', (req, res) => {
         if (latestMessage !== '') {
             endTime = Date.now();
             const elapsedTime = endTime - startTime;
-            console.log(`Data received: ${newMessage}, Elapsed time: ${elapsedTime} ms`);
+            console.log(`Data received: ${latestMessage}, Elapsed time: ${elapsedTime} ms`);
         }
         latestMessage = newMessage;
         startTime = Date.now();
@@ -592,6 +592,7 @@ app.get('/message', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
 
 
 
