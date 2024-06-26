@@ -69,7 +69,7 @@
     <title>Control Lamp</title>
     <script>
         function sendCommand(command) {
-            const startTime = performance.now(); // Catat waktu ketika perintah dikirim
+            const startTime = Date.now(); // Catat waktu saat perintah dikirim dalam epoch time
             fetch('http://213.210.21.65:3000/message', {
                 method: 'POST',
                 headers: {

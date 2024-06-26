@@ -553,7 +553,7 @@ app.get('/message', (req, res) => {
 
 app.post('/response-time', (req, res) => {
     const responseTime = req.body.responseTime;
-    const totalTime = performance.now() - startTime;
+    const totalTime = Date.now() - startTime; // Hitung selisih waktu dalam milidetik
     console.log(`Waktu yang diperlukan untuk menerima perintah: ${totalTime} ms`);
     res.sendStatus(200); // Kirim status sukses
 });
@@ -561,6 +561,7 @@ app.post('/response-time', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
 
 
 
