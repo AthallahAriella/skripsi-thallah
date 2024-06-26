@@ -523,6 +523,36 @@
 
 
 //+++++++HTTP+++++++
+// const express = require('express');
+// const path = require('path');
+
+// const app = express();
+// const port = 3000;
+
+// app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.json()); // Tambahkan middleware untuk parsing JSON
+
+// app.get("/", (req, res) => {
+//     res.sendFile(path.join(__dirname, 'views', 'coba.html'));
+//     console.log("Served coba.html");
+// });
+
+// let latestMessage = ''; // Variabel untuk menyimpan pesan terbaru
+
+// app.post('/message', (req, res) => {
+//     latestMessage = req.body.message;
+//     console.log(`data received: ${latestMessage}`);
+//     res.sendStatus(200); // Kirim status sukses
+// });
+
+// app.get('/message', (req, res) => {
+//     res.json({ message: latestMessage }); // Kirim pesan terbaru sebagai JSON
+// });
+
+// app.listen(port, () => {
+//     console.log(`Server running on port ${port}`);
+// });
+
 const express = require('express');
 const path = require('path');
 
@@ -530,23 +560,33 @@ const app = express();
 const port = 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json()); // Tambahkan middleware untuk parsing JSON
+app.use(express.json());
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'coba.html'));
     console.log("Served coba.html");
 });
 
-let latestMessage = ''; // Variabel untuk menyimpan pesan terbaru
+let latestMessage = '';
+let startTime;
+let endTime;
 
 app.post('/message', (req, res) => {
-    latestMessage = req.body.message;
-    console.log(`data received: ${latestMessage}`);
-    res.sendStatus(200); // Kirim status sukses
+    const newMessage = req.body.message;
+    if (newMessage !== latestMessage) {
+        if (latestMessage !== '') {
+            endTime = Date.now();
+            const elapsedTime = endTime - startTime;
+            console.log(`Data received: ${newMessage}, Elapsed time: ${elapsedTime} ms`);
+        }
+        latestMessage = newMessage;
+        startTime = Date.now();
+    }
+    res.sendStatus(200);
 });
 
 app.get('/message', (req, res) => {
-    res.json({ message: latestMessage }); // Kirim pesan terbaru sebagai JSON
+    res.json({ message: latestMessage });
 });
 
 app.listen(port, () => {
@@ -556,6 +596,7 @@ app.listen(port, () => {
 
 
 
+//===============KOKOKOKOKOO============
 
 
 
