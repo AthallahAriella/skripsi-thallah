@@ -523,8 +523,6 @@
 
 
 //+++++++HTTP+++++++
-
-
 const express = require('express');
 const path = require('path');
 
@@ -547,13 +545,16 @@ app.post('/message', (req, res) => {
     res.sendStatus(200); // Kirim status sukses
 });
 
-app.get('/message', (req, res) => {
-    res.json({ message: latestMessage }); // Kirim pesan terbaru sebagai JSON
+app.post('/response-time', (req, res) => {
+    const responseTime = req.body.responseTime;
+    console.log(`Waktu yang diperlukan untuk menerima perintah: ${responseTime} ms`);
+    res.sendStatus(200); // Kirim status sukses
 });
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
 
 
 
