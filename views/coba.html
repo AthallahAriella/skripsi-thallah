@@ -125,20 +125,23 @@
     <title>Control Lamp</title>
     <script>
         let timer;
-        let startTime;
+        let elapsedTime = 0;
 
         function startTimer() {
-            startTime = Date.now();
             timer = setInterval(() => {
-                document.getElementById('time').innerText = Date.now() - startTime + ' ms';
+                elapsedTime += 10;
+                document.getElementById('timer').innerText = elapsedTime;
             }, 10);
         }
 
         function stopTimer() {
             clearInterval(timer);
-            const elapsedTime = Date.now() - startTime;
-            console.log('Elapsed time: ' + elapsedTime + ' ms');
-            return elapsedTime;
+        }
+
+        function resetTimer() {
+            stopTimer();
+            elapsedTime = 0;
+            document.getElementById('timer').innerText = elapsedTime;
         }
 
         function sendCommand(command) {
@@ -154,6 +157,7 @@
                     throw new Error('Network response was not ok');
                 }
                 console.log('Command sent:', command);
+                startTimer();
             })
             .catch(error => {
                 console.error('Error sending command:', error);
@@ -163,7 +167,6 @@
         function handleCheckboxChange(event) {
             const checkbox = event.target;
             const checkboxId = checkbox.id;
-            startTimer();
 
             switch (checkboxId) {
                 case 'toggle_checkbox_1':
@@ -182,15 +185,36 @@
                     console.log('Unknown checkbox ID');
             }
         }
+
+        function pollServer() {
+            fetch('http://213.210.21.65:3000/status')
+            .then(response => response.json())
+            .then(data => {
+                if (data.elapsedTime !== undefined && data.elapsedTime > 0) {
+                    stopTimer();
+                    console.log('Elapsed time:', data.elapsedTime);
+                    // Display the elapsed time or handle it as needed
+                }
+            })
+            .catch(error => {
+                console.error('Error polling server:', error);
+            });
+        }
+
+        window.onload = function() {
+            setInterval(pollServer, 1000); // Poll server every second
+        };
     </script>
 </head>
 <body>
     <h1>Control Lamp</h1>
+    <div>
+        <span>Elapsed Time: </span><span id="timer">0</span> ms
+    </div>
     <input type="checkbox" id="toggle_checkbox_1" onchange="handleCheckboxChange(event)"> Lamp 1<br>
     <input type="checkbox" id="toggle_checkbox_2" onchange="handleCheckboxChange(event)"> Lamp 2<br>
     <input type="checkbox" id="toggle_checkbox_3" onchange="handleCheckboxChange(event)"> Lamp 3<br>
     <input type="checkbox" id="toggle_checkbox_4" onchange="handleCheckboxChange(event)"> Lamp 4<br>
-    <div>Time elapsed: <span id="time">0 ms</span></div>
 </body>
 </html>
 
