@@ -569,20 +569,24 @@ app.get("/", (req, res) => {
 
 let latestMessage = '';
 let startTime;
-let endTime;
 
 app.post('/message', (req, res) => {
-    const newMessage = req.body.message;
-    if (newMessage !== latestMessage) {
-        if (latestMessage !== '') {
-            endTime = Date.now();
-            const elapsedTime = endTime - startTime;
-            console.log(`Data received: ${latestMessage}, Elapsed time: ${elapsedTime} ms`);
+    try {
+        const newMessage = req.body.message;
+        if (newMessage !== latestMessage) {
+            if (latestMessage !== '') {
+                const endTime = Date.now();
+                const elapsedTime = endTime - startTime;
+                console.log(`Data received: ${latestMessage}, Elapsed time: ${elapsedTime} ms`);
+            }
+            latestMessage = newMessage;
+            startTime = Date.now();
         }
-        latestMessage = newMessage;
-        startTime = Date.now();
+        res.sendStatus(200);
+    } catch (error) {
+        console.error('Error processing JSON:', error);
+        res.sendStatus(400);
     }
-    res.sendStatus(200);
 });
 
 app.get('/message', (req, res) => {
@@ -592,6 +596,7 @@ app.get('/message', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
 
 
 
