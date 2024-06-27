@@ -583,12 +583,13 @@ app.post('/message', (req, res) => {
             latestMessage = newMessage;
             startTime = Date.now();
         }
-        res.sendStatus(200);
+        res.status(200).json({ message: "OK" });
     } catch (error) {
         console.error('Error processing JSON:', error);
         res.sendStatus(400);
     }
 });
+
 
 app.get('/status', (req, res) => {
     res.json({ elapsedTime, message: latestMessage });
