@@ -568,18 +568,25 @@ app.get("/", (req, res) => {
 });
 
 let latestMessage = '';
-let startTime;
+let startTime; // Variabel untuk menyimpan waktu mulai
 
 app.post('/message', (req, res) => {
     try {
         const newMessage = req.body.message;
+        
+        // Jika ini adalah pesan pertama, atur startTime
+        if (!startTime) {
+            startTime = Date.now();
+        }
+
         if (newMessage !== latestMessage) {
             const endTime = Date.now();
             const elapsedTime = endTime - startTime;
-            console.log(`Data received: ${newMessage}, Elapsed time: ${elapsedTime} ms`);
+            console.log(`Data received: ${newMessage}`);
+            console.log(`Elapsed time: ${elapsedTime} ms`);
 
             latestMessage = newMessage;
-            startTime = Date.now();
+            startTime = Date.now(); // Reset startTime untuk pesan berikutnya
         }
         res.sendStatus(200);
     } catch (error) {
@@ -595,6 +602,7 @@ app.get('/message', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
 
 
 
