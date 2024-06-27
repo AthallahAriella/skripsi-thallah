@@ -121,77 +121,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Control Lamp</title>
+    <title>IoT Control</title>
     <script>
-        let timer;
         let startTime;
+        let timerInterval;
 
-        function startTimer() {
-            startTime = Date.now();
-            timer = setInterval(() => {
-                document.getElementById('time').innerText = Date.now() - startTime + ' ms';
-            }, 10);
-        }
-
-        function stopTimer() {
-            clearInterval(timer);
-            const elapsedTime = Date.now() - startTime;
-            console.log('Elapsed time heheh: ' + elapsedTime + ' ms');
-            return elapsedTime;
-        }
-
-        function sendCommand(command) {
-            fetch('http://213.210.21.65:3000/message', {
+        function sendMessage(message) {
+            fetch('/message', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ message: command }),
+                body: JSON.stringify({ message: message })
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                if (response.ok) {
+                    console.log('Message sent:', message);
+                    startTimer();
+                } else {
+                    console.error('Failed to send message');
                 }
-                console.log('Command sent:', command);
-            })
-            .catch(error => {
-                console.error('Error sending command:', error);
             });
         }
 
-        function handleCheckboxChange(event) {
-            const checkbox = event.target;
-            const checkboxId = checkbox.id;
-            startTimer();
-
-            switch (checkboxId) {
-                case 'toggle_checkbox_1':
-                    sendCommand(checkbox.checked ? '1' : '2');
-                    break;
-                case 'toggle_checkbox_2':
-                    sendCommand(checkbox.checked ? '3' : '4');
-                    break;
-                case 'toggle_checkbox_3':
-                    sendCommand(checkbox.checked ? '7' : '8');
-                    break;
-                case 'toggle_checkbox_4':
-                    sendCommand(checkbox.checked ? '5' : '6');
-                    break;
-                default:
-                    console.log('Unknown checkbox ID');
-            }
+        function startTimer() {
+            startTime = Date.now();
+            timerInterval = setInterval(updateElapsedTime, 100);
         }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function updateElapsedTime() {
+            const elapsedTime = Date.now() - startTime;
+            document.getElementById('elapsed-time').innerText = `Elapsed time: ${elapsedTime} ms`;
+        }
+
+        function checkServerStatus() {
+            fetch('/status')
+            .then(response => response.json())
+            .then(data => {
+                if (data.elapsedTime) {
+                    document.getElementById('server-response').innerText = `Data received: ${data.message}, Elapsed time: ${data.elapsedTime} ms`;
+                    stopTimer();
+                }
+            });
+        }
+
+        setInterval(checkServerStatus, 1000); // Poll the server every second
     </script>
 </head>
 <body>
-    <h1>Control Lamp</h1>
-    <input type="checkbox" id="toggle_checkbox_1" onchange="handleCheckboxChange(event)"> Lamp 1<br>
-    <input type="checkbox" id="toggle_checkbox_2" onchange="handleCheckboxChange(event)"> Lamp 2<br>
-    <input type="checkbox" id="toggle_checkbox_3" onchange="handleCheckboxChange(event)"> Lamp 3<br>
-    <input type="checkbox" id="toggle_checkbox_4" onchange="handleCheckboxChange(event)"> Lamp 4<br>
-    <div>Time elapsed: <span id="time">0 ms</span></div>
+    <h1>IoT Control</h1>
+    <button onclick="sendMessage('1')">Nyalakan Lampu 1</button>
+    <button onclick="sendMessage('2')">Matikan Lampu 1</button>
+    <button onclick="sendMessage('3')">Nyalakan Lampu 2</button>
+    <button onclick="sendMessage('4')">Matikan Lampu 2</button>
+    <p id="elapsed-time">Elapsed time: 0 ms</p>
+    <p id="server-response"></p>
 </body>
 </html>
+
 
 
 
