@@ -594,6 +594,7 @@ app.get('/status', (req, res) => {
     res.json({ elapsedTime, message: latestMessage });
 });
 
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
