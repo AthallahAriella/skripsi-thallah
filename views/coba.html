@@ -152,6 +152,7 @@
 
         function stopTimer() {
             clearInterval(timerInterval);
+            document.getElementById('elapsed-time').innerText = ""; // Clear the elapsed time display
         }
 
         function updateElapsedTime() {
@@ -163,8 +164,8 @@
             fetch('/status')
             .then(response => response.json())
             .then(data => {
-                if (data.elapsedTime) {
-                    //document.getElementById('server-response').innerText = `Data received: ${data.message}, Elapsed time: ${data.elapsedTime} ms`;
+                if (data.elapsedTime !== undefined) {
+                    document.getElementById('server-response').innerText = `Data received: ${data.message}, Elapsed time: ${data.elapsedTime} ms`;
                     stopTimer();
                 }
             });
@@ -179,10 +180,11 @@
     <button onclick="sendMessage('2')">Matikan Lampu 1</button>
     <button onclick="sendMessage('3')">Nyalakan Lampu 2</button>
     <button onclick="sendMessage('4')">Matikan Lampu 2</button>
-    <p id="elapsed-time">Elapsed time: 0 ms</p>
-    
+    <p id="elapsed-time"></p>
+    <p id="server-response"></p>
 </body>
 </html>
+
 
 
 

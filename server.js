@@ -569,7 +569,7 @@ app.get("/", (req, res) => {
 
 let latestMessage = '';
 let startTime; // Variabel untuk menyimpan waktu mulai
-let elapsedTime;
+let elapsedTime; // Variabel untuk menyimpan waktu yang telah berlalu
 
 app.post('/message', (req, res) => {
     try {
@@ -607,6 +607,7 @@ app.get('/status', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
 
 
 
