@@ -573,13 +573,12 @@ let elapsedTime = 0;
 
 app.post('/message', (req, res) => {
     try {
-        console.log('Request body:', req.body);
         const newMessage = req.body.message;
         if (newMessage !== latestMessage) {
             if (latestMessage !== '') {
                 const endTime = Date.now();
                 elapsedTime = endTime - startTime;
-                console.log(`Data received: ${newMessage}, Elapsed time: ${elapsedTime} ms`);
+                console.log(`Data received: ${latestMessage}, Elapsed time: ${elapsedTime} ms`);
             }
             latestMessage = newMessage;
             startTime = Date.now();
@@ -598,10 +597,6 @@ app.get('/status', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
-
-
-
-
 
 
 
