@@ -553,6 +553,77 @@
 //     console.log(`Server running on port ${port}`);
 // });
 
+// const express = require('express');
+// const path = require('path');
+
+// const app = express();
+// const port = 3000;
+
+// app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.json());
+
+// app.get("/", (req, res) => {
+//     res.sendFile(path.join(__dirname, 'views', 'coba.html'));
+//     console.log("Served coba.html");
+// });
+
+// let latestMessage = '';
+// let startTime; // Variabel untuk menyimpan waktu mulai
+// let elapsedTime; // Variabel untuk menyimpan waktu yang telah berlalu
+
+// app.post('/message', (req, res) => {
+//     try {
+//         const newMessage = req.body.message;
+
+//         // Jika ini adalah pesan pertama, atur startTime
+//         if (!startTime) {
+//             startTime = Date.now();
+//         }
+
+//         // Periksa apakah newMessage tidak undefined
+//         if (newMessage !== undefined) {
+//             if (newMessage !== latestMessage) {
+//                 const endTime = Date.now();
+//                 elapsedTime = endTime - startTime;
+//                 console.log(`Data received: ${newMessage}`);
+//                 console.log(`Elapsed time: ${elapsedTime} ms`);
+
+//                 latestMessage = newMessage;
+//                 startTime = Date.now(); // Reset startTime untuk pesan berikutnya
+//             }
+//         } else {
+//             console.log(`Data received: data dari esp32`);
+//         }
+        
+//         res.sendStatus(200);
+//     } catch (error) {
+//         console.error('Error processing JSON:', error);
+//         res.sendStatus(400);
+//     }
+// });
+
+// app.get('/message', (req, res) => {
+//     res.json({ message: latestMessage });
+// });
+
+// app.get('/status', (req, res) => {
+//     res.json({ message: latestMessage, elapsedTime: elapsedTime });
+// });
+
+// app.listen(port, () => {
+//     console.log(`Server running on port ${port}`);
+// });
+
+
+
+
+
+
+//====================MQTT=================================
+
+const mqtt = require('mqtt');
+const client = mqtt.connect('mqtt://213.210.21.65'); // Ganti dengan alamat broker MQTT Anda
+
 const express = require('express');
 const path = require('path');
 
@@ -571,39 +642,33 @@ let latestMessage = '';
 let startTime; // Variabel untuk menyimpan waktu mulai
 let elapsedTime; // Variabel untuk menyimpan waktu yang telah berlalu
 
-app.post('/message', (req, res) => {
-    try {
-        const newMessage = req.body.message;
+client.on('connect', () => {
+    client.subscribe('esp32/status', (err) => {
+        if (!err) {
+            console.log('Subscribed to esp32/status');
+        }
+    });
+});
+
+client.on('message', (topic, message) => {
+    if (topic === 'esp32/status') {
+        const newMessage = message.toString();
 
         // Jika ini adalah pesan pertama, atur startTime
         if (!startTime) {
             startTime = Date.now();
         }
 
-        // Periksa apakah newMessage tidak undefined
-        if (newMessage !== undefined) {
-            if (newMessage !== latestMessage) {
-                const endTime = Date.now();
-                elapsedTime = endTime - startTime;
-                console.log(`Data received: ${newMessage}`);
-                console.log(`Elapsed time: ${elapsedTime} ms`);
+        if (newMessage !== latestMessage) {
+            const endTime = Date.now();
+            elapsedTime = endTime - startTime;
+            console.log(`Data received: ${newMessage}`);
+            console.log(`Elapsed time: ${elapsedTime} ms`);
 
-                latestMessage = newMessage;
-                startTime = Date.now(); // Reset startTime untuk pesan berikutnya
-            }
-        } else {
-            console.log(`Data received: data dari esp32`);
+            latestMessage = newMessage;
+            startTime = Date.now(); // Reset startTime untuk pesan berikutnya
         }
-        
-        res.sendStatus(200);
-    } catch (error) {
-        console.error('Error processing JSON:', error);
-        res.sendStatus(400);
     }
-});
-
-app.get('/message', (req, res) => {
-    res.json({ message: latestMessage });
 });
 
 app.get('/status', (req, res) => {
@@ -616,116 +681,4 @@ app.listen(port, () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-//===============KOKOKOKOKOO============
-
-
-
-
-
-// const express = require('express');
-// const path = require('path');
-
-// const app = express();
-// const port = 3000;
-
-// app.use(express.static(path.join(__dirname, 'public')));
-// app.use(express.json()); // Middleware untuk parsing JSON
-
-// app.get("/", (req, res) => {
-//     res.sendFile(path.join(__dirname, 'views', 'coba.html'));
-//     console.log("Served coba.html");
-// });
-
-// let latestData = ''; // Variabel untuk menyimpan data terbaru dari ESP32
-
-// // Handler untuk menerima permintaan GET dari ESP32 pada endpoint /arduinoApi
-// app.get('/arduinoApi', (req, res) => {
-//     const serverReceiveTime = Date.now();
-//     res.json({ data: latestData, serverReceiveTime: serverReceiveTime }); // Kirimkan data terbaru sebagai respons JSON
-//     console.log(`Sent data to ESP32 at ${serverReceiveTime}`);
-// });
-
-// // Handler untuk menerima permintaan POST dari ESP32 pada endpoint /arduinoApi
-// app.post('/arduinoApi', (req, res) => {
-//     const serverReceiveTime = Date.now();
-//     latestData = req.body.data; // Ambil data dari body permintaan POST
-//     console.log(`Received data from ESP32 at ${serverReceiveTime}:`, latestData);
-//     res.sendStatus(200); // Kirim status sukses
-// });
-
-// const server = app.listen(port, () => {
-//     console.log(`Server running on port ${port}`);
-// });
-
-// console.log('WebSocket server is listening on port 3000');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//====================MQTT=================================
-
-// const mqtt = require('mqtt');
-// const express = require('express');
-// const app = express();
-// const path = require('path');
-
-// const MQTT_SERVER = 'mqtt://mqtt-broker-url'; // Ganti dengan URL MQTT broker
-// const MQTT_TOPIC = 'lamp/control'; // Topik MQTT untuk kontrol lampu
-
-// // Inisialisasi server MQTT
-// const client = mqtt.connect(MQTT_SERVER);
-
-// client.on('connect', () => {
-//   console.log('Connected to MQTT broker');
-//   client.subscribe(MQTT_TOPIC, (err) => {
-//     if (err) {
-//       console.error('Error subscribing to topic', err);
-//     }
-//   });
-// });
-
-// client.on('message', (topic, message) => {
-//   console.log(`Received message on topic ${topic}: ${message.toString()}`);
-//   // Di sini bisa ditambahkan logika untuk mengirim perintah ke Arduino
-//   // Misalnya, mengirimkan pesan ke perangkat ESP32 untuk mengontrol lampu
-// });
-
-// // Middleware untuk menyajikan file statis dari direktori 'public'
-// app.use(express.static(path.join(__dirname, 'public')));
-
-// // Endpoint untuk menerima perintah dari web ke ESP32 melalui MQTT
-// app.post('/arduinoApi', (req, res) => {
-//   const { data } = req.body;
-//   client.publish(MQTT_TOPIC, data);
-//   res.send(`Command '${data}' sent to MQTT broker`);
-// });
-
-// // Jalankan server pada port tertentu
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });
 

@@ -1,3 +1,5 @@
+
+<!-- WebSocket -->
 <!-- <!DOCTYPE html>
 <html>
 <head>
@@ -62,8 +64,8 @@
 </body>
 </html> -->
 
-<!-- http -->
-<!DOCTYPE html>
+<!-- =========================================HTTP============================= -->
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>IoT Control</title>
@@ -126,7 +128,76 @@
     <p id="elapsed-time">Elapsed time: 0 ms</p>
     <p id="server-response"></p>
 </body>
+</html> -->
+
+<!-- ===========================MQTT==================== -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IoT Control</title>
+    <script>
+        let startTime;
+        let timerInterval;
+
+        function sendMessage(message) {
+            fetch('/message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: message })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Message sent:', message);
+                    startTimer();
+                } else {
+                    console.error('Failed to send message');
+                }
+            });
+        }
+
+        function startTimer() {
+            startTime = Date.now();
+            timerInterval = setInterval(updateElapsedTime, 100);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function updateElapsedTime() {
+            const elapsedTime = Date.now() - startTime;
+            document.getElementById('elapsed-time').innerText = `Elapsed time: ${elapsedTime} ms`;
+        }
+
+        function checkServerStatus() {
+            fetch('/status')
+            .then(response => response.json())
+            .then(data => {
+                if (data.elapsedTime !== undefined) { // Periksa apakah elapsedTime tidak undefined
+                    document.getElementById('server-response').innerText = `Elapsed time: ${data.elapsedTime} ms`;
+                    stopTimer();
+                }
+            });
+        }
+
+        setInterval(checkServerStatus, 1000); // Poll the server every second
+    </script>
+</head>
+<body>
+    <h1>IoT Control</h1>
+    <button onclick="sendMessage('1')">Nyalakan Lampu 1</button>
+    <button onclick="sendMessage('2')">Matikan Lampu 1</button>
+    <button onclick="sendMessage('3')">Nyalakan Lampu 2</button>
+    <button onclick="sendMessage('4')">Matikan Lampu 2</button>
+    <p id="elapsed-time">Elapsed time: 0 ms</p>
+    <p id="server-response"></p>
+</body>
 </html>
+
+
 
 
 
