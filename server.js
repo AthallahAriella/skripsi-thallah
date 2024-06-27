@@ -575,21 +575,22 @@ app.post('/message', (req, res) => {
     try {
         const newMessage = req.body.message;
 
-        // Jika ini adalah pesan pertama, atur startTime
-        if (!startTime) {
-            startTime = Date.now();
+        if (newMessage) {  // Pastikan newMessage tidak undefined atau null
+            if (newMessage !== latestMessage) {
+                if (startTime) {
+                    const endTime = Date.now();
+                    elapsedTime = endTime - startTime;
+                    console.log(`Data received: ${newMessage}`);
+                    console.log(`Elapsed time: ${elapsedTime} ms`);
+                }
+                latestMessage = newMessage;
+                startTime = Date.now(); // Reset startTime untuk pesan berikutnya
+            }
+            res.sendStatus(200);
+        } else {
+            console.error('Error: Received undefined or empty message');
+            res.sendStatus(400);
         }
-
-        if (newMessage !== latestMessage) {
-            const endTime = Date.now();
-            elapsedTime = endTime - startTime;
-            console.log(`Data received: ${newMessage}`);
-            console.log(`Elapsed time: ${elapsedTime} ms`);
-
-            latestMessage = newMessage;
-            startTime = Date.now(); // Reset startTime untuk pesan berikutnya
-        }
-        res.sendStatus(200);
     } catch (error) {
         console.error('Error processing JSON:', error);
         res.sendStatus(400);
@@ -600,13 +601,10 @@ app.get('/message', (req, res) => {
     res.json({ message: latestMessage });
 });
 
-app.get('/status', (req, res) => {
-    res.json({ message: latestMessage, elapsedTime: elapsedTime });
-});
-
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
 
 
 
