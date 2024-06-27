@@ -584,8 +584,8 @@ app.post('/message', (req, res) => {
             const elapsedTime = endTime - startTime;
             console.log(`Data received: ${newMessage}`);
             console.log(`Elapsed time: ${elapsedTime} ms`);
-            const timing = elapsedTime - endTime
-            console.log(`Timingnya: ${timing} ms`);
+            // const timing = elapsedTime - endTime
+            // console.log(`Timingnya: ${timing} ms`);
 
             latestMessage = newMessage;
             startTime = Date.now(); // Reset startTime untuk pesan berikutnya
