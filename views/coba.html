@@ -164,7 +164,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.elapsedTime) {
-                    document.getElementById('server-response').innerText = `Data received: ${data.message}, Elapsed time: ${data.elapsedTime} ms`;
+                    //document.getElementById('server-response').innerText = `Data received: ${data.message}, Elapsed time: ${data.elapsedTime} ms`;
                     stopTimer();
                 }
             });
