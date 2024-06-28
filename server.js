@@ -646,11 +646,14 @@ client.on('connect', () => {
     client.subscribe('esp32/status', (err) => {
         if (!err) {
             console.log('Subscribed to esp32/status');
+        } else {
+            console.error('Failed to subscribe:', err);
         }
     });
 });
 
 client.on('message', (topic, message) => {
+    console.log(`Message received on topic ${topic}: ${message.toString()}`);
     if (topic === 'esp32/status') {
         const newMessage = message.toString();
 
@@ -673,6 +676,13 @@ client.on('message', (topic, message) => {
 
 app.get('/status', (req, res) => {
     res.json({ message: latestMessage, elapsedTime: elapsedTime });
+});
+
+app.post('/message', (req, res) => {
+    const message = req.body.message;
+    console.log(`Received message from client: ${message}`);
+    client.publish('esp32/control', message);
+    res.sendStatus(200);
 });
 
 app.listen(port, () => {
