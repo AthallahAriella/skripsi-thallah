@@ -155,9 +155,6 @@
                 } else {
                     console.error('Failed to send message');
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
             });
         }
 
@@ -183,9 +180,6 @@
                     document.getElementById('server-response').innerText = `Elapsed time: ${data.elapsedTime} ms`;
                     stopTimer();
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
             });
         }
 
@@ -202,7 +196,6 @@
     <p id="server-response"></p>
 </body>
 </html>
-
 
 
 
