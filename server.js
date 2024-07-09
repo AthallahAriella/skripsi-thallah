@@ -411,115 +411,115 @@
 
 
 
-// const express = require('express');
-// const http = require('http');
-// const { Server } = require('socket.io');
-// const path = require('path');
-
-// const app = express();
-// const server = http.createServer(app);
-// const io = new Server(server);
-
-// app.use(express.json());
-// app.use(express.static(path.join(__dirname, 'public')));
-
-// app.get("/", (req, res) => {
-//     res.sendFile(path.join(__dirname, 'views', 'proses.html'));
-//     console.log("Served proses.html");
-
-// });
-
-// io.on("connection", (socket) => {
-//     console.log("Client connected...");
-//     socket.on("disconnect", () => {
-//         console.log("Client disconnected");
-//     });
-//     socket.on("command", (data) => {
-//         const timestamp = new Date();
-//         console.log(`Command received at ${timestamp}: ${data}`);
-//         // Kirim data ke ESP32 melalui HTTP atau WebSocket
-//     });
-// });
-
-
-// server.listen(3000, () => {
-//     console.log("Server running on port 3000!");
-// });
-
-// let latestData = "";
-
-// app.post("/arduinoApi", (req, res) => {
-//     console.log("POST request received at /arduinoApi");
-
-//     const data = req.body.data;
-//     if (!data) {
-//         console.log("No data received in the request");
-//         return res.status(400).json({ error: "Data is required" });
-//     }
-
-//     latestData = data;
-//     console.log("Data received: ", data);
-//     io.emit('dataStatus', { status: 'success', data: data });
-
-//     // Log and respond to the client
-//     res.status(200).json({ message: "Data received successfully" });
-// });
-
-// app.get("/arduinoApi", (req, res) => {
-//     res.status(200).json({ data: latestData });
-// });
-
-//++++++++++++++++++++++websocket++++++++++++++++++++++++++++++++++++++++++++++++
 const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
 const path = require('path');
-const WebSocket = require('ws');
 
 const app = express();
-const port = 3000;
+const server = http.createServer(app);
+const io = new Server(server);
 
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'coba.html'));
-    console.log("Served coba.html");
+    res.sendFile(path.join(__dirname, 'views', 'proses.html'));
+    console.log("Served proses.html");
+
 });
 
-const server = app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
-
-const wss = new WebSocket.Server({ server });
-
-const clients = [];
-
-wss.on('connection', (ws) => {
-    console.log('Client connected');
-    clients.push(ws);
-
-    ws.on('message', (message) => {
-        console.log('Received:', message.toString()); // Convert buffer to string
-
-        clients.forEach((client) => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(message.toString()); // Convert buffer to string before sending
-            }
-        });
+io.on("connection", (socket) => {
+    console.log("Client connected...");
+    socket.on("disconnect", () => {
+        console.log("Client disconnected");
     });
-
-    ws.on('close', () => {
-        console.log('Client disconnected');
-        const index = clients.indexOf(ws);
-        if (index > -1) {
-            clients.splice(index, 1);
-        }
-    });
-
-    ws.on('error', (error) => {
-        console.log('WebSocket Error:', error);
+    socket.on("command", (data) => {
+        const timestamp = new Date();
+        console.log(`Command received at ${timestamp}: ${data}`);
+        // Kirim data ke ESP32 melalui HTTP atau WebSocket
     });
 });
 
-console.log('WebSocket server is listening on port 3000');
+
+server.listen(3000, () => {
+    console.log("Server running on port 3000!");
+});
+
+let latestData = "";
+
+app.post("/arduinoApi", (req, res) => {
+    console.log("POST request received at /arduinoApi");
+
+    const data = req.body.data;
+    if (!data) {
+        console.log("No data received in the request");
+        return res.status(400).json({ error: "Data is required" });
+    }
+
+    latestData = data;
+    console.log("Data received: ", data);
+    io.emit('dataStatus', { status: 'success', data: data });
+
+    // Log and respond to the client
+    res.status(200).json({ message: "Data received successfully" });
+});
+
+app.get("/arduinoApi", (req, res) => {
+    res.status(200).json({ data: latestData });
+});
+
+//++++++++++++++++++++++websocket++++++++++++++++++++++++++++++++++++++++++++++++
+// const express = require('express');
+// const path = require('path');
+// const WebSocket = require('ws');
+
+// const app = express();
+// const port = 3000;
+
+// app.use(express.static(path.join(__dirname, 'public')));
+
+// app.get("/", (req, res) => {
+//     res.sendFile(path.join(__dirname, 'views', 'coba.html'));
+//     console.log("Served coba.html");
+// });
+
+// const server = app.listen(port, () => {
+//     console.log(`Server running on port ${port}`);
+// });
+
+// const wss = new WebSocket.Server({ server });
+
+// const clients = [];
+
+// wss.on('connection', (ws) => {
+//     console.log('Client connected');
+//     clients.push(ws);
+
+//     ws.on('message', (message) => {
+//         console.log('Received:', message.toString()); // Convert buffer to string
+
+//         clients.forEach((client) => {
+//             if (client.readyState === WebSocket.OPEN) {
+//                 client.send(message.toString()); // Convert buffer to string before sending
+//             }
+//         });
+//     });
+
+//     ws.on('close', () => {
+//         console.log('Client disconnected');
+//         const index = clients.indexOf(ws);
+//         if (index > -1) {
+//             clients.splice(index, 1);
+//         }
+//     });
+
+//     ws.on('error', (error) => {
+//         console.log('WebSocket Error:', error);
+//     });
+// });
+
+// console.log('WebSocket server is listening on port 3000');
 
 
 //+++++++HTTP+++++++
