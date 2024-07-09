@@ -553,77 +553,6 @@
 //     console.log(`Server running on port ${port}`);
 // });
 //======================2=================
-const express = require('express');
-const path = require('path');
-
-const app = express();
-const port = 3000;
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
-
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'coba.html'));
-    console.log("Served coba.html");
-});
-
-let latestMessage = '';
-let startTime; // Variabel untuk menyimpan waktu mulai
-let elapsedTime; // Variabel untuk menyimpan waktu yang telah berlalu
-
-app.post('/message', (req, res) => {
-    try {
-        const newMessage = req.body.message;
-
-        // Jika ini adalah pesan pertama, atur startTime
-        if (!startTime) {
-            startTime = Date.now();
-        }
-
-        // Periksa apakah newMessage tidak undefined
-        if (newMessage !== undefined) {
-            if (newMessage !== latestMessage) {
-                const endTime = Date.now();
-                elapsedTime = endTime - startTime;
-                console.log(`Data received: ${newMessage}`);
-                console.log(`Elapsed time: ${elapsedTime} ms`);
-
-                latestMessage = newMessage;
-                startTime = Date.now(); // Reset startTime untuk pesan berikutnya
-            }
-        } else {
-            console.log(`Data received: data dari esp32`);
-        }
-        
-        res.sendStatus(200);
-    } catch (error) {
-        console.error('Error processing JSON:', error);
-        res.sendStatus(400);
-    }
-});
-
-app.get('/message', (req, res) => {
-    res.json({ message: latestMessage });
-});
-
-app.get('/status', (req, res) => {
-    res.json({ message: latestMessage, elapsedTime: elapsedTime });
-});
-
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
-
-
-
-
-
-
-//====================MQTT=================================
-
-// const mqtt = require('mqtt');
-// const client = mqtt.connect('mqtt://213.210.21.65'); // Ganti dengan alamat broker MQTT Anda
-
 // const express = require('express');
 // const path = require('path');
 
@@ -642,52 +571,123 @@ app.listen(port, () => {
 // let startTime; // Variabel untuk menyimpan waktu mulai
 // let elapsedTime; // Variabel untuk menyimpan waktu yang telah berlalu
 
-// client.on('connect', () => {
-//     client.subscribe('esp32/status', (err) => {
-//         if (!err) {
-//             console.log('Subscribed to esp32/status');
-//         } else {
-//             console.error('Failed to subscribe:', err);
-//         }
-//     });
-// });
-
-// client.on('message', (topic, message) => {
-//     console.log(`Message received on topic ${topic}: ${message.toString()}`);
-//     if (topic === 'esp32/status') {
-//         const newMessage = message.toString();
+// app.post('/message', (req, res) => {
+//     try {
+//         const newMessage = req.body.message;
 
 //         // Jika ini adalah pesan pertama, atur startTime
 //         if (!startTime) {
 //             startTime = Date.now();
 //         }
 
-//         if (newMessage !== latestMessage) {
-//             const endTime = Date.now();
-//             elapsedTime = endTime - startTime;
-//             console.log(`Data received: ${newMessage}`);
-//             console.log(`Elapsed time: ${elapsedTime} ms`);
+//         // Periksa apakah newMessage tidak undefined
+//         if (newMessage !== undefined) {
+//             if (newMessage !== latestMessage) {
+//                 const endTime = Date.now();
+//                 elapsedTime = endTime - startTime;
+//                 console.log(`Data received: ${newMessage}`);
+//                 console.log(`Elapsed time: ${elapsedTime} ms`);
 
-//             latestMessage = newMessage;
-//             startTime = Date.now(); // Reset startTime untuk pesan berikutnya
+//                 latestMessage = newMessage;
+//                 startTime = Date.now(); // Reset startTime untuk pesan berikutnya
+//             }
+//         } else {
+//             console.log(`Data received: data dari esp32`);
 //         }
+        
+//         res.sendStatus(200);
+//     } catch (error) {
+//         console.error('Error processing JSON:', error);
+//         res.sendStatus(400);
 //     }
+// });
+
+// app.get('/message', (req, res) => {
+//     res.json({ message: latestMessage });
 // });
 
 // app.get('/status', (req, res) => {
 //     res.json({ message: latestMessage, elapsedTime: elapsedTime });
 // });
 
-// app.post('/message', (req, res) => {
-//     const message = req.body.message;
-//     console.log(`Received message from client: ${message}`);
-//     client.publish('esp32/control', message);
-//     res.sendStatus(200);
-// });
-
 // app.listen(port, () => {
 //     console.log(`Server running on port ${port}`);
 // });
+
+
+
+
+
+
+//====================MQTT=================================
+
+const mqtt = require('mqtt');
+const client = mqtt.connect('mqtt://213.210.21.65'); // Ganti dengan alamat broker MQTT Anda
+
+const express = require('express');
+const path = require('path');
+
+const app = express();
+const port = 3000;
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'coba.html'));
+    console.log("Served coba.html");
+});
+
+let latestMessage = '';
+let startTime; // Variabel untuk menyimpan waktu mulai
+let elapsedTime; // Variabel untuk menyimpan waktu yang telah berlalu
+
+client.on('connect', () => {
+    client.subscribe('esp32/status', (err) => {
+        if (!err) {
+            console.log('Subscribed to esp32/status');
+        } else {
+            console.error('Failed to subscribe:', err);
+        }
+    });
+});
+
+client.on('message', (topic, message) => {
+    console.log(`Message received on topic ${topic}: ${message.toString()}`);
+    if (topic === 'esp32/status') {
+        const newMessage = message.toString();
+
+        // Jika ini adalah pesan pertama, atur startTime
+        if (!startTime) {
+            startTime = Date.now();
+        }
+
+        if (newMessage !== latestMessage) {
+            const endTime = Date.now();
+            elapsedTime = endTime - startTime;
+            console.log(`Data received: ${newMessage}`);
+            console.log(`Elapsed time: ${elapsedTime} ms`);
+
+            latestMessage = newMessage;
+            startTime = Date.now(); // Reset startTime untuk pesan berikutnya
+        }
+    }
+});
+
+app.get('/status', (req, res) => {
+    res.json({ message: latestMessage, elapsedTime: elapsedTime });
+});
+
+app.post('/message', (req, res) => {
+    const message = req.body.message;
+    console.log(`Received message from client: ${message}`);
+    client.publish('esp32/control', message);
+    res.sendStatus(200);
+});
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
 
 
 
