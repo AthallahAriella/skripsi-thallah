@@ -470,56 +470,56 @@
 // });
 
 //++++++++++++++++++++++websocket++++++++++++++++++++++++++++++++++++++++++++++++
-// const express = require('express');
-// const path = require('path');
-// const WebSocket = require('ws');
+const express = require('express');
+const path = require('path');
+const WebSocket = require('ws');
 
-// const app = express();
-// const port = 3000;
+const app = express();
+const port = 3000;
 
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// app.get("/", (req, res) => {
-//     res.sendFile(path.join(__dirname, 'views', 'coba.html'));
-//     console.log("Served coba.html");
-// });
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'coba.html'));
+    console.log("Served coba.html");
+});
 
-// const server = app.listen(port, () => {
-//     console.log(`Server running on port ${port}`);
-// });
+const server = app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
 
-// const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ server });
 
-// const clients = [];
+const clients = [];
 
-// wss.on('connection', (ws) => {
-//     console.log('Client connected');
-//     clients.push(ws);
+wss.on('connection', (ws) => {
+    console.log('Client connected');
+    clients.push(ws);
 
-//     ws.on('message', (message) => {
-//         console.log('Received:', message.toString()); // Convert buffer to string
+    ws.on('message', (message) => {
+        console.log('Received:', message.toString()); // Convert buffer to string
 
-//         clients.forEach((client) => {
-//             if (client.readyState === WebSocket.OPEN) {
-//                 client.send(message.toString()); // Convert buffer to string before sending
-//             }
-//         });
-//     });
+        clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message.toString()); // Convert buffer to string before sending
+            }
+        });
+    });
 
-//     ws.on('close', () => {
-//         console.log('Client disconnected');
-//         const index = clients.indexOf(ws);
-//         if (index > -1) {
-//             clients.splice(index, 1);
-//         }
-//     });
+    ws.on('close', () => {
+        console.log('Client disconnected');
+        const index = clients.indexOf(ws);
+        if (index > -1) {
+            clients.splice(index, 1);
+        }
+    });
 
-//     ws.on('error', (error) => {
-//         console.log('WebSocket Error:', error);
-//     });
-// });
+    ws.on('error', (error) => {
+        console.log('WebSocket Error:', error);
+    });
+});
 
-// console.log('WebSocket server is listening on port 3000');
+console.log('WebSocket server is listening on port 3000');
 
 
 //+++++++HTTP+++++++
@@ -553,66 +553,66 @@
 //     console.log(`Server running on port ${port}`);
 // });
 //======================2=================
-const express = require('express');
-const path = require('path');
+// const express = require('express');
+// const path = require('path');
 
-const app = express();
-const port = 3000;
+// const app = express();
+// const port = 3000;
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
+// app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'coba.html'));
-    console.log("Served coba.html");
-});
+// app.get("/", (req, res) => {
+//     res.sendFile(path.join(__dirname, 'views', 'coba.html'));
+//     console.log("Served coba.html");
+// });
 
-let latestMessage = '';
-let startTime; // Variabel untuk menyimpan waktu mulai
-let elapsedTime; // Variabel untuk menyimpan waktu yang telah berlalu
+// let latestMessage = '';
+// let startTime; // Variabel untuk menyimpan waktu mulai
+// let elapsedTime; // Variabel untuk menyimpan waktu yang telah berlalu
 
-app.post('/message', (req, res) => {
-    try {
-        const newMessage = req.body.message;
+// app.post('/message', (req, res) => {
+//     try {
+//         const newMessage = req.body.message;
 
-        // Jika ini adalah pesan pertama, atur startTime
-        if (!startTime) {
-            startTime = Date.now();
-        }
+//         // Jika ini adalah pesan pertama, atur startTime
+//         if (!startTime) {
+//             startTime = Date.now();
+//         }
 
-        // Periksa apakah newMessage tidak undefined
-        if (newMessage !== undefined) {
-            if (newMessage !== latestMessage) {
-                const endTime = Date.now();
-                elapsedTime = endTime - startTime;
-                console.log(`Data received: ${newMessage}`);
-                console.log(`Elapsed time: ${elapsedTime} ms`);
+//         // Periksa apakah newMessage tidak undefined
+//         if (newMessage !== undefined) {
+//             if (newMessage !== latestMessage) {
+//                 const endTime = Date.now();
+//                 elapsedTime = endTime - startTime;
+//                 console.log(`Data received: ${newMessage}`);
+//                 console.log(`Elapsed time: ${elapsedTime} ms`);
 
-                latestMessage = newMessage;
-                startTime = Date.now(); // Reset startTime untuk pesan berikutnya
-            }
-        } else {
-            console.log(`Data received: data dari esp32`);
-        }
+//                 latestMessage = newMessage;
+//                 startTime = Date.now(); // Reset startTime untuk pesan berikutnya
+//             }
+//         } else {
+//             console.log(`Data received: data dari esp32`);
+//         }
         
-        res.sendStatus(200);
-    } catch (error) {
-        console.error('Error processing JSON:', error);
-        res.sendStatus(400);
-    }
-});
+//         res.sendStatus(200);
+//     } catch (error) {
+//         console.error('Error processing JSON:', error);
+//         res.sendStatus(400);
+//     }
+// });
 
-app.get('/message', (req, res) => {
-    res.json({ message: latestMessage });
-});
+// app.get('/message', (req, res) => {
+//     res.json({ message: latestMessage });
+// });
 
-app.get('/status', (req, res) => {
-    res.json({ message: latestMessage, elapsedTime: elapsedTime });
-});
+// app.get('/status', (req, res) => {
+//     res.json({ message: latestMessage, elapsedTime: elapsedTime });
+// });
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+// app.listen(port, () => {
+//     console.log(`Server running on port ${port}`);
+// });
 
 
 
